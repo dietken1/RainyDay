@@ -96,8 +96,6 @@ static void dispose(void *option)
 void *get_light_routine(void *option)
 {
     OPTION *optionInfo;
-    struct timeval startTime;
-    struct timeval endTime;
 
     int fd = open(DEVICE, O_RDWR);
     if (fd <= 0)

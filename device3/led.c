@@ -150,9 +150,6 @@ void *led_routine(void *option)
     OPTION *optionInfo;
     int currentLEDValue;
 
-    struct timeval startTime;
-    struct timeval endTime;
-
     optionInfo = (OPTION *)option;
     currentLEDValue = 0;
 

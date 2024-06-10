@@ -98,7 +98,7 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH ./devic
 
 # Device 3
 
-###실행 방법
+### 실행 방법
 
 ```bash
 make

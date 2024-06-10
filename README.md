@@ -20,7 +20,6 @@ sudo ./[프로젝트 dir]
 
 ```sh
 make clean
-
 ```
 
 # Device 1
@@ -31,17 +30,13 @@ Main Device에 작동 여부를 요청하고, 응답 값을 바탕으로 워터�
 # waterpump.c 컴파일방법
 
 ``` sh
-
 gcc -o waterpump waterpump.c -lwiringPi -ljson-c
-
 ```
 
 # waterpump.c 실행방법
 
 ``` sh
-
 ./waterpump
-
 ```
 
 # waterlevel.c 소개
@@ -51,17 +46,13 @@ gcc -o waterpump waterpump.c -lwiringPi -ljson-c
 # waterlevel.c 컴파일방법
 
 ``` sh
-
 gcc -o waterlevel watelevel.c -ljson-c
-
 ```
 
 # waterlevel.c 실행방법
 
 ``` sh
-
 ./waterlevel
-
 ```
 
 # Device 2
@@ -110,9 +101,7 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH ./devic
 실행 방법
 
 ```bash
-
 make
 
 ./main 서버IP주소 서버포트
-
 ```

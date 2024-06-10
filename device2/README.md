@@ -1,4 +1,3 @@
-../device2/README.md
 # system programming and practice: Team project
 Team name: RainyDay
 
@@ -43,16 +42,3 @@ export LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH
 ~/device2 $ gcc -o device2 -I/usr/local/include/cjson device2.o speaker.o temperature_and_humidity.o -L/usr/local/lib/arm-linux-gnueabihf -lcjson -l wiringPi
 
 ~/device2 $ sudo LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH ./device2 IP PORT
-
-
-# Device 3
-
-실행 방법.
-
-```bash
-
-make
-
-./main 서버IP주소 서버포트
-
-```

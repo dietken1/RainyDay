@@ -35,7 +35,7 @@ int readData(void){
     digitalWrite(T_H_PIN, LOW);
     delay(18);
 
-    // send signals to sensor for preparing data transmission by setting the pin high for 40 ms
+    // send signals to sensor for preparing data transmission by setting the pin high for 40 micro sec
     digitalWrite(T_H_PIN, HIGH);
     delayMicroseconds(40);
 
@@ -51,10 +51,10 @@ int readData(void){
         while (digitalRead(T_H_PIN) == laststate){
             cnt++;
 
-            // time delay for 1 ms
+            // time delay for 1 micro sec
             delayMicroseconds(1);
 
-            // when not changed 255 times
+            // when not changed 255 times (255 micro sec)
             if (cnt == 255)
                 break;
         }
@@ -62,18 +62,24 @@ int readData(void){
         // store present status of pin
         laststate = digitalRead(T_H_PIN);
 
-        // when not changed for 255 times
+        // when not changed for 255 times (255 micro sec)
         if (cnt == 255)
             break;
 
-        // skip first 3 data (for filtering noise), and then read data bits
+        /*
+        skip first 3 data (for filtering noise)
+        odd th data is start signal, even th data is data bit
+        in this code uses data bit only*/ 
         if ((i >= 4) && (i % 2 == 0)){
-            // left shifting 1 time
+            // left shifting 1 time for writing 1 bit data
             data[j/8] <<= 1;
 
             // set 1 if cnt is greater than 16
             if (cnt > 16)
                 data[j/8] |= 1;
+            /*
+            byte anchor, if j < 8 then 0th byte
+            if 8 <= j < 16 then  1th byte .. */  
             j++;
         }
     }

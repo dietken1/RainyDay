@@ -14,8 +14,6 @@
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 #define SPI_PATH "/dev/spidev0.0"  //SPI장치 파일 경로 정의
 #define ADC_CHANNEL 0              //ADC 채널 0
-#define IP "192.168.75.4"          //서버 IP주소
-#define PORT 12345                 //서버 포트번호
 
 static uint8_t MODE = 0;           //SPI 모드
 static uint8_t BITS = 8;           //SPI 비트 수
@@ -48,7 +46,7 @@ int readADC(int fd, int channel) {
 }
 
 //ADC 값을 서버에 JSON 형식으로 전송하는 함수
-void sendValue(int adcValue) {
+void sendValue(int adcValue, const char* ip, int port) {
     int sck;                        //소켓 파일 디스크립터
     struct sockaddr_in serv_addr;   //서버 주소 구조체
     char response[256];             //서버로부터 응답을 받을 버퍼
@@ -61,8 +59,8 @@ void sendValue(int adcValue) {
 
     memset(&serv_addr, 0, sizeof(serv_addr));  //서버 주소 구조체 초기화
     serv_addr.sin_family = AF_INET;            //주소 체계 설정
-    serv_addr.sin_addr.s_addr = inet_addr(IP); //서버 IP 주소 설정
-    serv_addr.sin_port = htons(PORT);          //서버 포트 번호 설정
+    serv_addr.sin_addr.s_addr = inet_addr(ip); //서버 IP 주소 설정
+    serv_addr.sin_port = htons(port);          //서버 포트 번호 설정
 
     if (connect(sck, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1) { //서버에 연결
         perror("Connection Error");
@@ -147,12 +145,19 @@ static int prepare(int fd) {
         perror("Can't set read CLOCK");
         return -1;
     }
-    
+
     return 0;
 }
 
 //메인 함수
-int main() {
+int main(int argc, char* argv[]) {
+
+    if (argc != 3)
+    {
+        printf("Usage : %s <IP> <port>\n", argv[0]);
+        exit(1);
+    }
+
     int fd = open(SPI_PATH, O_RDWR); //SPI 디바이스 파일 열기
     if (fd < 0) {
         perror("Open Error");
@@ -166,12 +171,12 @@ int main() {
 
     //주기적으로 센서값을 읽어서 서버에 전송
     while (1) {
-        int adcValue = readADC(fd, ADC_CHANNEL); //ADC 값 읽기
+        int adcValue = readADC(fd, ADC_CHANNEL);         //ADC 값 읽기
         if (adcValue >= 0) {
-            printf("Value: %d\n", adcValue);     //측정값 출력
-            sendValue(adcValue);                 //서버에 측정값 전송
+            printf("Value: %d\n", adcValue);             //측정값 출력
+            sendValue(adcValue, argv[1], atoi(argv[2])); //서버에 측정값 전송
         }
-        usleep(1000000);                         //1초 대기
+        usleep(1000000);    //1초 대기
     }
     close(fd);  //SPI 디바이스 파일 닫기
     return 0;   //프로그램 종료

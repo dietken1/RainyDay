@@ -36,7 +36,7 @@ gcc -o waterpump waterpump.c -lwiringPi -ljson-c
 # waterpump.c 실행방법
 
 ``` sh
-./waterpump
+./waterpump IP주소 PORT번호
 ```
 
 # waterlevel.c 소개
@@ -52,7 +52,7 @@ gcc -o waterlevel watelevel.c -ljson-c
 # waterlevel.c 실행방법
 
 ``` sh
-./waterlevel
+./waterlevel IP주소 PORT번호
 ```
 
 # Device 2

@@ -8,18 +8,16 @@
 #include <unistd.h>      //표준 심볼 상수 및 자료형 사용 목적
 
 #define PIN 0 // PIN:0 (wiringPi GPIO 17)
-#define IP "192.168.75.4"          //서버 IP주소
-#define PORT 12345                 //서버 포트번호
 
 //서버에 펌프 상태를 요청하는 함수
 int askStatus(int sck) {
     char response[256];     //서버로부터 응답을 받을 버퍼
 
     //JSON형식의 Request 객체 생성
-    struct json_object *request_json = json_object_new_object();                                 //객체 생성
+    struct json_object* request_json = json_object_new_object();                                 //객체 생성
     json_object_object_add(request_json, "type", json_object_new_string("actuator"));            //요청에 "type": "actuator" 추가
     json_object_object_add(request_json, "actuator_type", json_object_new_string("water_pump")); //요청에 "actuator_type": "water_pump" 추가
-    const char *request_str = json_object_to_json_string(request_json);                          //JSON 객체를 문자열로 변환해주는 함수
+    const char* request_str = json_object_to_json_string(request_json);                          //JSON 객체를 문자열로 변환해주는 함수
 
     //Request
     if (write(sck, request_str, strlen(request_str)) == -1) {  //서버에 Request전송
@@ -39,8 +37,8 @@ int askStatus(int sck) {
     response[str_len] = '\0'; // 응답의 끝에 null 문자를 추가하여 문자열로 만듦
 
     //Response->Json 파싱
-    struct json_object *parsed_json; //파싱된 JSON 객체
-    struct json_object *action;      //JSON 객체 내의 action 필드
+    struct json_object* parsed_json; //파싱된 JSON 객체
+    struct json_object* action;      //JSON 객체 내의 action 필드
 
     parsed_json = json_tokener_parse(response); //응답을 파싱하여 JSON 객체로 변환
     if (parsed_json == NULL) {
@@ -58,7 +56,7 @@ int askStatus(int sck) {
 
     int action_value = json_object_get_int(action);     //action필드에서 정수 값 추출
 
-    if (action_value == 1 || action_value == 0) {   
+    if (action_value == 1 || action_value == 0) {
         printf("Server Response: %d\n", action_value);  //통신 성공
     }
     else {
@@ -70,7 +68,14 @@ int askStatus(int sck) {
 }
 
 //메인 함수
-int main() {
+int main(int argc, char* argv[]) {
+
+    if (argc != 3)
+    {
+        printf("Usage : %s <IP> <port>\n", argv[0]);
+        exit(1);
+    }
+
     int sck; // 소켓 파일 디스크립터
     struct sockaddr_in serv_addr; // 서버 주소 구조체
 
@@ -90,12 +95,12 @@ int main() {
             continue;
         }
 
-        memset(&serv_addr, 0, sizeof(serv_addr));  //서버 주소 구조체 초기화
-        serv_addr.sin_family = AF_INET;            //주소 체계 설정
-        serv_addr.sin_addr.s_addr = inet_addr(IP); //서버 IP 주소 설정
-        serv_addr.sin_port = htons(PORT);          //서버 포트 번호 설정
+        memset(&serv_addr, 0, sizeof(serv_addr));       //서버 주소 구조체 초기화
+        serv_addr.sin_family = AF_INET;                 //주소 체계 설정
+        serv_addr.sin_addr.s_addr = inet_addr(argv[1]); //서버 IP 주소 설정
+        serv_addr.sin_port = htons(atoi(argv[2]));      //서버 포트 번호 설정
 
-        if (connect(sck, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1) { //서버에 연결
+        if (connect(sck, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1) { //서버에 연결
             perror("Connection Error");
             close(sck);
             sleep(10000000); //잠시 대기
@@ -107,9 +112,10 @@ int main() {
         if (action == 1) {           //작동
             digitalWrite(PIN, HIGH);
             printf("Pump ON\n");
-	    delay(1000);
-	    digitalWrite(PIN, LOW);
-        } else {                     //중지
+            delay(1000);
+            digitalWrite(PIN, LOW);
+        }
+        else {                       //중지
             digitalWrite(PIN, LOW);
             printf("Pump OFF\n");
         }

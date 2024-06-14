@@ -6,7 +6,6 @@
 #include "button.h"
 #include "config.h"
 #include "services/button_service.h"
-#include "services/plant_service.h"
 #include "services/lcd1602_service.h"
 #include "services/communication_service.h"
 #include "step.h"
@@ -33,7 +32,6 @@ int main(void) {
         return 1;
     }
 
-    initializePlants();
 
     // 첫 번째 버튼 초기화
     button1 = (BUTTON *)malloc(sizeof(BUTTON));

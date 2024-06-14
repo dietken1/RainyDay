@@ -19,7 +19,7 @@ extern BUTTON *button2;
 
 
 void* step1onPressDown1(BUTTON* btn) {
-    (void)btn; // 사용되지 않는 매개변수 경고 방지
+    (void)btn; 
 
     plant_index = (plant_index + 1) % plant_count;
     printf("Switched plant is: %s\n", plants[plant_index].name);
@@ -31,7 +31,7 @@ void* step1onPressDown1(BUTTON* btn) {
 }
 
 void* step1onPressDown2(BUTTON* btn) {
-    (void)btn; // 사용되지 않는 매개변수 경고 방지
+    (void)btn; 
 
     printf("Selected: %s\n", plants[plant_index].name);
 
@@ -42,7 +42,7 @@ void* step1onPressDown2(BUTTON* btn) {
 }
 
 void* step2onPressDown1(BUTTON* btn) {
-    (void)btn; // 사용되지 않는 매개변수 경고 방지
+    (void)btn; 
     plant_quantity++;
     printf("Current Quantity: %d\n", plant_quantity);
 
@@ -53,7 +53,7 @@ void* step2onPressDown1(BUTTON* btn) {
 }
 
 void* step2onPressDown2(BUTTON* btn) {
-    (void)btn; // 사용되지 않는 매개변수 경고 방지
+    (void)btn; 
 
     if (plant_quantity == 0) {
         printf("개수 선택이 우선되어야함\n");

@@ -21,7 +21,7 @@ void update_lcd_message(const char *top_message, const char *bottom_message) {
 }
 
 void* lcd_display_thread(void* arg) {
-    (void)arg; // 사용되지 않는 매개변수 경고 방지
+    (void)arg; 
     
     LCD_init(0x27, 1); // I2C 주소에 맞게 설정
     while (1) {

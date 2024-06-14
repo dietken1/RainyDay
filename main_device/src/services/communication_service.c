@@ -22,7 +22,7 @@ SensorActuatorStatus status = {0, 0, 0, 0, 0, 0};
 int led_value = 0;
 
 void *communication_thread(void *arg) {
-    (void)arg; // 사용되지 않는 매개변수를 무시합니다.
+    (void)arg; 
 
     int server_fd = setup_server_socket();
     printf("Server listening on port %d\n", PORT);
@@ -39,7 +39,7 @@ void *communication_thread(void *arg) {
             continue;
         }
 
-        buffer[read_bytes] = '\0'; // Ensure null-terminated string
+        buffer[read_bytes] = '\0'; // 널 붙여줌
         printf("Received message: %s\n", buffer);
 
         // JSON 파싱 및 처리

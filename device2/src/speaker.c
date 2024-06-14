@@ -8,18 +8,22 @@ GPIO 18 */
 
 // function for speaker(buzzer)
 int buzzer(void){
-    // initialize wiringPi library to control GPIO pin
-    wiringPiSetup();
+    // initialize wiringPi library to control GPIO pin: repeat till success
+    while (wiringPiSetup() == -1);
 
     // set GPIO pin to pwm mode
     pinMode(PIN, PWM_OUTPUT);
 
     /*
     set pwm clock
-    19.2 MHz / 19 = about 1 MHz */
+    19.2 MHz(default) / 19 = about 1 MHz */
     pwmSetClock(19);
 
-    // set pwm mode to Mark-Space mode for more accurate pwm signal
+    /*
+    set pwm mode to Mark-Space mode for more accurate pwm signal
+    Mark-Space mode is used for controlling the desired frequency by
+    using ON/OFF cycle
+    default: balanced mode */
     pwmSetMode(PWM_MODE_MS);
 
     // activate speaker 3 times
@@ -34,7 +38,8 @@ int buzzer(void){
 
         /*
         set pwm duty cycle
-        50% on, 50% off for clear sound */
+        50% on, 50% off for clear sound
+        clock / pwmWrite second parameter */
         pwmWrite(PIN, 1000000 / 262 / 2);
 
         // ringing for 3 sec

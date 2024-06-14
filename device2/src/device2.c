@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
         // set IP version: the socket will use IPv4 address
         serv_addr.sin_family = AF_INET;
 
-        // convert string type ip address into binary type
+        // convert string type ip address into binary type one
         serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
 
         // convert string type port number into integer type
@@ -116,13 +116,13 @@ int main(int argc, char *argv[]){
         // receive data from the sensor
         data_to_send = t_and_h();
 
-        // send data to main device
+        //send data to main device
         create_and_send_json(sock, data_to_send, 1);
 
         // time pause for 2 sec
         usleep(2000000);
 
-        // receive response from main device
+        // read received response from main device and then put into msg variable
         str_len = read(sock, msg, sizeof(msg)-1);
 
         // handling error: not reading response
@@ -192,13 +192,13 @@ int main(int argc, char *argv[]){
         if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
             error_handling("connect() error");
 
-        // create json object for sending request to main device
+        //create json object for sending request to main device
         create_and_send_json(sock, 0, 0);
 
         // time pause for 2 sec
         usleep(2000000);
 
-        // read response from main device
+        // read received response from main device and then put into msg variable
         str_len = read(sock, msg, sizeof(msg)-1);
 
         // handling error: not reading response

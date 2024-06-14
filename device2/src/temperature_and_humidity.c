@@ -20,15 +20,15 @@ int data[5];
 
 // function: for reading data from sensor
 int readData(void){
-    uint8_t laststate = HIGH;
-    uint8_t cnt = 0;
-    uint8_t j = 0;
+    uint8_t laststate = HIGH; // for comparing with present state
+    uint8_t cnt = 0; // for counting how many times it doesn't work
+    uint8_t j = 0; // byte anchor
 
     // initialize data array: set all elements as 0
     for (int i = 0; i < 5; i++)
         data[i] = 0;
 
-    // set pin mode to output mode: for sending signals to sensor
+    // set pin mode to output mode, for sending signals to sensor
     pinMode(T_H_PIN, OUTPUT);
 
     // initiate communication with sensor by setting the pin low for 18 ms
@@ -42,7 +42,9 @@ int readData(void){
     // set pin mode to input mode: for receiving data from sensor
     pinMode(T_H_PIN, INPUT);
 
-    // read data from sensor: uint8_t for saving memory space
+    /*
+    read data from sensor: uint8_t for saving memory space, it ueses 1 byte
+    repeat this loop up to 100 times*/
     for (uint8_t i = 0; i < 100; i++){
         // initialize cnt with 0 
         cnt = 0;
@@ -67,7 +69,7 @@ int readData(void){
             break;
 
         /*
-        skip first 3 data (for filtering noise)
+        skip first 4 data (for filtering noise)
         odd th data is start signal, even th data is data bit
         in this code uses data bit only*/ 
         if ((i >= 4) && (i % 2 == 0)){
@@ -86,11 +88,11 @@ int readData(void){
 
     // Verify the integrity of the data by comparing checksum
     if ((j >= 40) && (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF))){
-        // valid data
+        // returns 1 for notifying the values in data array is valid data
         return 1;
     }
 
-    // invalid data
+    // returns 0 for notifying the values in data array is invalid data
     return 0;
 }
 
@@ -98,7 +100,7 @@ int t_and_h(void){
     // initialize wiringPi library to control GPIO pin: repeat till success
     while (wiringPiSetup() == -1);
 
-    // read data: repeat till receiving valid data
+    // call read data: repeat till receiving valid data
     while (readData() == 0)
         delay(1000);
 

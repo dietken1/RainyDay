@@ -12,10 +12,10 @@
 
 다음 명령어를 사용하여 필요한 라이브러리를 설치할 수 있습니다:
 
-```bash
-sudo apt update
-sudo apt install build-essential make libi2c-dev libcjson-dev
-
+   ```bash
+   sudo apt update
+   sudo apt install build-essential make libi2c-dev libcjson-dev
+   ```
 
 ### 명령어
 

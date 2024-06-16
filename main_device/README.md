@@ -40,6 +40,7 @@
 - 도메인 로직과 비지니스 로직을 굳이 구분하진 않았습니다.
 - config.txt에는 button gpio 핀번호와 pr이 있습니다.
 
+```bash
 main_device/
 ├── include/                      # 헤더 파일 디렉터리
 │   ├── config.h
@@ -73,3 +74,4 @@ main_device/
 ├── Makefile
 ├── README.md
 └── main.c
+```

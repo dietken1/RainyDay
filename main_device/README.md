@@ -1,6 +1,44 @@
+## Main device 프로젝트 구조
+
+- service dir로 비지니스 로직과 인프라로직을 분리하였습니다.
+- 도메인 로직과 비지니스 로직을 굳이 구분하진 않았습니다.
+- config.txt에는 button gpio 핀번호와 pr이 있습니다.
+
+```bash
+main_device/
+├── include/                      # 헤더 파일 디렉터리
+│   ├── config.h
+│   ├── gpio.h
+│   ├── LCD1602.h
+│   ├── socket.h
+│   ├── button.h
+│   └── services/
+│       ├── button_service.h
+│       ├── communication_service.h
+│       ├── lcd1602_service.h
+│       ├── plant.h
+│       └── step.h
+├── src/                          # 소스 파일 디렉터리
+│   ├── config.c
+│   ├── gpio.c
+│   ├── LCD1602.c
+│   ├── socket.c
+│   ├── button.c
+│   └── services/
+│       ├── button_service.c
+│       ├── communication_service.c
+│       ├── lcd1602_service.c
+│       ├── plant.c
+│       └── step.c
+├── config.txt                   # 버튼 스레드 pr 및 gpio 핀번호
+├── Makefile
+├── README.md
+└── main.c
+```
+
 ## 요구 사항
 
-빌드하고 실행하려면 다음과 같은 라이브러리가 필요합니다:
+빌드하고 실행하려면 다음과 같은 라이브러리가 필요합니다
 
 - `gcc` (GNU Compiler Collection)
 - `make`
@@ -10,7 +48,7 @@
 
 ### 설치(linux)
 
-다음 명령어를 사용하여 필요한 라이브러리를 설치할 수 있습니다:
+다음 명령어를 사용하여 필요한 라이브러리를 설치할 수 있습니다
 
    ```bash
    sudo apt update
@@ -33,45 +71,3 @@
 
    ```sh
    make clean
-
-## 프로젝트 구조
-
-- service dir로 비지니스 로직 및 도메인 로직을 분리하였고 그외는 인프라로직 입니다.
-- 도메인 로직과 비지니스 로직을 굳이 구분하진 않았습니다.
-- config.txt에는 button gpio 핀번호와 pr이 있습니다.
-
-```bash
-main_device/
-├── include/                      # 헤더 파일 디렉터리
-│   ├── config.h
-│   ├── gpio.h
-│   ├── LCD1602.h
-│   ├── socket.h
-│   └── services/
-│       ├── button.h
-│       ├── button_service.h
-│       ├── communication_service.h
-│       ├── lcd1602_service.h
-│       ├── plant.h
-│       ├── plant_service.h
-│       ├── step.h
-│       └── step_service.h
-├── src/                          # 소스 파일 디렉터리
-│   ├── config.c
-│   ├── gpio.c
-│   ├── LCD1602.c
-│   ├── socket.c
-│   └── services/
-│       ├── button.c
-│       ├── button_service.c
-│       ├── communication_service.c
-│       ├── lcd1602_service.c
-│       ├── plant.c
-│       ├── plant_service.c
-│       ├── step.c
-│       └── step_service.c
-├── config.txt                   # 버튼 스레드 pr 및 gpio 핀번호
-├── Makefile
-├── README.md
-└── main.c
-```

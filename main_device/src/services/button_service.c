@@ -1,6 +1,6 @@
 #include "button_service.h"
-#include "step.h"
-#include "plant.h"
+#include "services/step.h"
+#include "services/plant.h"
 #include "services/lcd1602_service.h"
 #include "services/communication_service.h"
 #include <stdio.h>

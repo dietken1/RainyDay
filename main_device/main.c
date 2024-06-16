@@ -8,7 +8,7 @@
 #include "services/button_service.h"
 #include "services/lcd1602_service.h"
 #include "services/communication_service.h"
-#include "step.h"
+#include "services/step.h"
 
 // 설정 파일 경로
 #define CONFIG_FILE "config.txt"

@@ -122,6 +122,7 @@ void *get_light_routine(void *option)
         // 폴링레이트에 따라서 1초에 몇번 작동할지에 따라, 해당하는 HZ로 동작하도록 usleep 함.
         usleep(1000000 / optionInfo->polling_rate);
     }
+    close(fd);
     pthread_cleanup_pop(0);
 }
 

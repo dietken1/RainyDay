@@ -70,22 +70,22 @@ int main(int argc, char *argv[])
     int signal = 1;
     char *msg;
 
-    if (argc != 3)
+    if (argc != 3) // != 4
     {
-        printf("Usage : %s <IP> <port>\n", argv[0]);
+        printf("Usage : %s <IP> <port>\n", argv[0]); // printf("Usage : %s <IP> <port> <polling_rate>\n", argv[0]);
         exit(1);
     }
 
     OPTION *getLightOption = (OPTION *)calloc(1, sizeof(OPTION));
     strcpy(getLightOption->type, "sensor");
     strcpy(getLightOption->devName, "light_intensity");
-    getLightOption->polling_rate = 100;
+    getLightOption->polling_rate = 100; // atoi(argv[3]);
     getLightOption->value = 0;
 
     OPTION *LEDOption = (OPTION *)calloc(1, sizeof(OPTION));
     strcpy(LEDOption->type, "actuator");
     strcpy(LEDOption->devName, "led");
-    LEDOption->polling_rate = 100;
+    LEDOption->polling_rate = 100; // atoi(argv[3]);
     LEDOption->value = 0;
 
     if ((getLightThread = initGetLight(getLightOption)) == NULL)

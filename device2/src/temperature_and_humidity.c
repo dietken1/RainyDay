@@ -70,7 +70,7 @@ int readData(void){
 
         /*
         skip first 4 data (for filtering noise)
-        odd th data is start signal, even th data is data bit
+        odd-th data is start signal, even-th data is data bit
         in this code uses data bit only*/ 
         if ((i >= 4) && (i % 2 == 0)){
             // left shifting 1 time for writing 1 bit data

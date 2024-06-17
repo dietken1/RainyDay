@@ -6,17 +6,15 @@
 #include <assert.h>  
 
 #define IN 0
-#define OUT 1
 #define PWM 0
 
-#define LOW 0
-#define HIGH 1
 #define VALUE_MAX 256
 #define DIRECTION_MAX 256
 
-#define PERIOD 10000000 // 100hz
-#define DUTY_CYCLE PERIOD / 100 // 1hz
+#define PERIOD 10000000 // 100hz, PWM 주기 설정 (100Hz)
+#define DUTY_CYCLE PERIOD / 100 // 1hz, 듀티 사이클 계산 (1%)
 
+// PWM 채널을 시스템에 등록
 static int PWMExport(int pwmnum)
 {
 #define BUFFER_MAX 3
@@ -40,6 +38,7 @@ static int PWMExport(int pwmnum)
     return (0);
 }
 
+// PWM 채널을 활성화
 static int PWMEnable(int pwmnum)
 {
     static const char s_enable_str[] = "1";
@@ -56,12 +55,13 @@ static int PWMEnable(int pwmnum)
         return -1;
     }
 
-    write(fd, s_enable_str, strlen(s_enable_str));
+    write(fd, s_enable_str, strlen(s_enable_str)); // 1을 write.
     close(fd);
 
     return (0);
 }
 
+// // PWM 주기를 설정
 static int PWMWritePeriod(int pwmnum, int value)
 {
     char s_value_str[VALUE_MAX];
@@ -89,6 +89,7 @@ static int PWMWritePeriod(int pwmnum, int value)
     return (0);
 }
 
+// // PWM 듀티 사이클을 설정
 static int PWMWriteDutyCycle(int pwmnum, int value)
 {
     char s_value_str[VALUE_MAX];
@@ -123,9 +124,10 @@ static void dispose(void *option)
     optionInfo = (OPTION *)option;
     // 할당한 자원 해제
 
-    free(option);
+    free(optionInfo);
 }
 
+// // LED 밝기 조절
 void adjustLED(int *currentLEDValue, int LEDValue)
 {
 
@@ -153,8 +155,8 @@ void *led_routine(void *option)
     optionInfo = (OPTION *)option;
     currentLEDValue = 0;
 
-    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-    pthread_cleanup_push(dispose, option);
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); // 쓰레드 취소 가능 상태로 설정
+    pthread_cleanup_push(dispose, option); // 쓰레드 종료 시 dispose 실행 하도록 설정.
 
     // 폴링하면서 버튼 이벤트 핸들링.
     while (1)
@@ -165,6 +167,7 @@ void *led_routine(void *option)
         usleep(1000000 / optionInfo->polling_rate);
     }
 
+    // dispose 실행
     pthread_cleanup_pop(0);
 }
 

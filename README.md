@@ -3,6 +3,11 @@ Team name: RainyDay
 
 # Main Device
 
+author: 윤규민
+
+email: gmyun1999@ajou.ac.kr
+
+
 ## Main device 프로젝트 구조
 
 - service dir로 비지니스 로직과 인프라로직을 분리하였습니다.
@@ -66,21 +71,30 @@ main_device/
 
    ```sh
    sudo ./[프로젝트 dir]
+   ```
    
 2. **컴파일**
 
    ```sh
    make
+   ```
 
 3. **컴파일된 오브젝트 파일과 실행 파일을 제거**
 
    ```sh
    make clean
+   ```
 
 
 
 
 # Device 1
+
+author: 정원준
+
+email: dietken1@ajou.ac.kr
+
+
 ### waterpump.c 소개
 
 Main Device에 작동 여부를 요청하고, 응답 값을 바탕으로 워터펌프를 작동시키는 코드
@@ -114,6 +128,11 @@ gcc -o waterlevel watelevel.c -ljson-c
 ```
 
 # Device 2
+
+author: 김준성
+
+email: wnstjd123@ajou.ac.kr
+
 
 ### Description of device 2
 Device2 controls 1 sensor and 1 actuator
@@ -155,6 +174,11 @@ sudo LD_LIBRARY_PATH=/usr/local/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH ./devic
 ```
 
 # Device 3
+
+author: 조민재
+
+email: ussr1285@ajou.ac.kr
+
 
 ### 실행 방법
 

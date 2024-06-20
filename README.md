@@ -182,8 +182,9 @@ email: ussr1285@ajou.ac.kr
 
 ### 실행 방법
 
+device3 디렉토리로 이동 후 아래 명령어들을 수행합니다.
+send_second는 서버에게 요청을 보낼 주기입니다.
 ```bash
 make
-
-./main 서버IP주소 서버포트
+./main <서버IP> <서버port> <send_second> <polling_rate>
 ```

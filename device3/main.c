@@ -13,16 +13,6 @@
 
 #include <cjson/cJSON.h>
 
-#define BUFFER_MAX 20
-#define DIRECTION_MAX 256
-#define VALUE_MAX 256
-
-#define IN 0
-#define OUT 1
-
-#define LOW 0
-#define HIGH 1
-
 pthread_t *getLightThread;
 pthread_t *LEDThread;
 char buffer[1024] = {0};
@@ -34,6 +24,7 @@ void error_handling(char *message)
     exit(1);
 }
 
+// 메시지 전송 및 수신
 cJSON *sendMsg(OPTION *option, int sock, char *message)
 {
     cJSON *json = cJSON_CreateObject();
@@ -51,7 +42,7 @@ cJSON *sendMsg(OPTION *option, int sock, char *message)
         cJSON_AddStringToObject(json, "actuator_type", option->devName);
     }
 
-    message = cJSON_Print(json);
+    message = cJSON_Print(json); // json 객체 문자열로 변환
     write(sock, message, strlen(message));
     str_len = read(sock, buffer, 1024);
     if (str_len == -1)
@@ -64,30 +55,31 @@ cJSON *sendMsg(OPTION *option, int sock, char *message)
 int main(int argc, char *argv[])
 {
     int sock;
-    struct sockaddr_in serv_addr;
-    int light = 0;
-    char *message;
+    struct sockaddr_in serv_addr; // 서버 주소 구조체
+    char *message = 0;
     int signal = 1;
     char *msg;
 
-    if (argc != 3) // != 4
+    if (argc != 5)
     {
-        printf("Usage : %s <IP> <port>\n", argv[0]); // printf("Usage : %s <IP> <port> <polling_rate>\n", argv[0]);
+        printf("Usage : %s <IP> <port> <send_second> <polling_rate>\n", argv[0]);
         exit(1);
     }
 
+    // 쓰레드를 위한 구조체
     OPTION *getLightOption = (OPTION *)calloc(1, sizeof(OPTION));
     strcpy(getLightOption->type, "sensor");
     strcpy(getLightOption->devName, "light_intensity");
-    getLightOption->polling_rate = 100; // atoi(argv[3]);
+    getLightOption->polling_rate = atoi(argv[4]);
     getLightOption->value = 0;
 
     OPTION *LEDOption = (OPTION *)calloc(1, sizeof(OPTION));
     strcpy(LEDOption->type, "actuator");
     strcpy(LEDOption->devName, "led");
-    LEDOption->polling_rate = 100; // atoi(argv[3]);
+    LEDOption->polling_rate = atoi(argv[4]);
     LEDOption->value = 0;
 
+    // 쓰레드 호출
     if ((getLightThread = initGetLight(getLightOption)) == NULL)
     { // initLED
         printf("getLight init fail\n");
@@ -106,16 +98,16 @@ int main(int argc, char *argv[])
     {
         cJSON *receiveJSON;
 
-        sock = socket(PF_INET, SOCK_STREAM, 0);
+        sock = socket(PF_INET, SOCK_STREAM, 0); // 소켓 생성
         if (sock == -1)
             error_handling("socket() error");
 
-        memset(&serv_addr, 0, sizeof(serv_addr));
-        serv_addr.sin_family = AF_INET;
-        serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
-        serv_addr.sin_port = htons(atoi(argv[2]));
+        memset(&serv_addr, 0, sizeof(serv_addr)); // 서버 주소 구조체 초기화
+        serv_addr.sin_family = AF_INET; // 주소 체계 설정 (IPv4)
+        serv_addr.sin_addr.s_addr = inet_addr(argv[1]); // IP 주소 설정
+        serv_addr.sin_port = htons(atoi(argv[2])); // 포트 번호 설정
 
-        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
+        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1) // 서버 연결
             error_handling("connect() error");
         if(signal > 0) // 조도 값 전송
         {
@@ -135,7 +127,7 @@ int main(int argc, char *argv[])
         printf("Receive message from Server : %s\n", msg);
         free(msg);
         free(receiveJSON);
-        sleep(1);
+        sleep(atoi(argv[3]));
         close(sock);
     }
     free(getLightThread);

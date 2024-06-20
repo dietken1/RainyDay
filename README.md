@@ -185,6 +185,7 @@ email: ussr1285@ajou.ac.kr
 device3 디렉토리로 이동 후 아래 명령어들을 수행합니다.
 
 send_second는 서버에게 요청을 보낼 주기입니다.
+polling_rate는 조도센서가 값을 읽는 주기, LED가 main으로부터 명령받은 빛 양을 체크하는 주기입니다.
 
 ```bash
 make
